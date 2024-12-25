@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
 function About() {
-  const [studentInfo, setStudentInfo] = useState(null); // Храним информацию о студенте
-  const [error, setError] = useState(null); // Храним ошибки, если они есть
-  const [loading, setLoading] = useState(true); // Состояние загрузки
+  const [studentInfo, setStudentInfo] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchStudentInfo = async () => {

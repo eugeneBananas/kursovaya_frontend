@@ -23,7 +23,7 @@ function Register() {
 
       if (response.ok) {
         alert("Регистрация прошла успешно! Теперь вы можете войти.");
-        history.push("/login"); // Перенаправляем на страницу входа
+        history.push("/login");
       } else {
         setError(data.message || "Произошла ошибка при регистрации.");
       }

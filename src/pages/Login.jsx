@@ -27,9 +27,9 @@ function Login() {
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem('token', data.token); // Сохраняем токен в localStorage
+        localStorage.setItem('token', data.token);
         alert('Login successful!');
-        navigate('/'); // Перенаправляем пользователя на главную страницу
+        navigate('/');
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.message || 'Login failed'}`);

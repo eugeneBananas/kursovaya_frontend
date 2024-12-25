@@ -4,8 +4,8 @@ function Logout() {
   const history = useHistory();
 
   const handleLogout = () => {
-    localStorage.removeItem("token"); // Удаляем токен
-    history.push("/login"); // Перенаправляем на страницу входа
+    localStorage.removeItem("token");
+    history.push("/login");
   };
 
   return (

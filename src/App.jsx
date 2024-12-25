@@ -5,8 +5,8 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Courses from './pages/Courses';
-import PrivateRoute from './components/PrivateRoute.jsx'; // Импортируем компонент PrivateRoute
-import About from './pages/About'; // Импортируем компонент About
+import PrivateRoute from './components/PrivateRoute.jsx';
+import About from './pages/About';
 
 function App() {
   return (
@@ -17,14 +17,13 @@ function App() {
 }
 
 function AppContent() {
-  const location = useLocation(); // Получаем текущий путь
+  const location = useLocation();
 
-  // Проверяем, нужно ли отображать Header
   const hideHeader = location.pathname === '/register' || location.pathname === '/login';
 
   return (
     <>
-      {!hideHeader && <Header />} {/* Отображаем Header, если не на /register или /login */}
+      {!hideHeader && <Header />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />

@@ -1,5 +1,5 @@
 import { Navigate } from 'react-router-dom';
-import PropTypes from 'prop-types'; // Импортируем prop-types
+import PropTypes from 'prop-types';
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -9,7 +9,7 @@ function PrivateRoute({ children }) {
 
 // Добавляем валидацию пропсов
 PrivateRoute.propTypes = {
-  children: PropTypes.node.isRequired, // Проверяем, что children передается и является React-узлом
+  children: PropTypes.node.isRequired,
 };
 
 export default PrivateRoute;

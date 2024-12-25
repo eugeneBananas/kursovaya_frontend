@@ -22,8 +22,8 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem("token", data.token); // Сохраняем токен
-        history.push("/dashboard"); // Перенаправляем на защищенную страницу
+        localStorage.setItem("token", data.token);
+        history.push("/dashboard");
       } else {
         setError(data.message || "Неверные учетные данные.");
       }

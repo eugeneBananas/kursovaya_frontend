@@ -1,51 +1,44 @@
 import { useState, useEffect } from "react";
-import { apiFetch } from './api'; // Импортируем функцию для запросов
+import { apiFetch } from './api';
 
 function Courses() {
-  const [courses, setCourses] = useState([]); // Храним курсы
-  const [tests, setTests] = useState([]); // Храним все тесты
-  const [filteredTests, setFilteredTests] = useState([]); // Храним отфильтрованные тесты
-  const [selectedCourse, setSelectedCourse] = useState(null); // Храним выбранный курс
-  const [expandedTest, setExpandedTest] = useState(null); // Храним ID развернутого теста
-  const [answers, setAnswers] = useState({}); // Храним ответы на вопросы
-  const [error, setError] = useState(null); // Храним ошибку
-  const [result, setResult] = useState(null); // Храним результат теста
-  const [isResultModalOpen, setIsResultModalOpen] = useState(false); // Стейт для открытия/закрытия модалки с результатом
+  const [courses, setCourses] = useState([]);
+  const [tests, setTests] = useState([]);
+  const [filteredTests, setFilteredTests] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [expandedTest, setExpandedTest] = useState(null);
+  const [answers, setAnswers] = useState({});
+  const [error, setError] = useState(null);
+  const [result, setResult] = useState(null);
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
 
-  // Загружаем данные о курсах
   useEffect(() => {
     apiFetch("http://localhost:8082/courses")
       .then((data) => setCourses(data))
       .catch((err) => setError(err.message));
-  }, []); // Выполняется один раз при монтировании компонента
+  }, []);
 
-  // Загружаем все тесты
   useEffect(() => {
     apiFetch("http://localhost:8082/api/tests")
-      .then((data) => setTests(data)) // Сохраняем все тесты
+      .then((data) => setTests(data))
       .catch((err) => setError(err.message));
-  }, []); // Выполняется один раз при монтировании компонента
+  }, []);
 
-  // Фильтрация тестов по выбранному курсу
   useEffect(() => {
     if (selectedCourse !== null) {
-      // Фильтруем тесты по courseId
       const filtered = tests.filter((test) => test.courseId === selectedCourse);
-      setFilteredTests(filtered); // Сохраняем отфильтрованные тесты
+      setFilteredTests(filtered);
     }
-  }, [selectedCourse, tests]); // Перезапускаем, когда курс выбран или тесты обновляются
+  }, [selectedCourse, tests]);
 
-  // Обработчик клика по курсу
   const handleCourseClick = (courseId) => {
-    setSelectedCourse(courseId); // Устанавливаем выбранный курс
+    setSelectedCourse(courseId);
   };
 
-  // Обработчик открытия/закрытия теста
   const handleToggleTest = (testId) => {
-    setExpandedTest(expandedTest === testId ? null : testId); // Если тест открыт, закрываем его, если закрыт - открываем
+    setExpandedTest(expandedTest === testId ? null : testId);
   };
 
-  // Обработчик выбора ответа
   const handleAnswerChange = (testId, questionId, option) => {
     setAnswers((prevAnswers) => ({
       ...prevAnswers,
@@ -56,12 +49,9 @@ function Courses() {
     }));
   };
 
-  // Отправка результатов
   const handleFinishTest = (test) => {
     const correctAnswersCount = test.questions.reduce((count, question) => {
       const selectedAnswer = answers[test.id]?.[question.id];
-      
-      // Проверка, является ли выбранный ответ правильным
       const correctAnswer = question.correctOptions[question.options.indexOf(selectedAnswer)];
       if (correctAnswer) {
         return count + 1;
@@ -70,12 +60,12 @@ function Courses() {
     }, 0);
 
     const totalQuestions = test.questions.length;
-    const score = (correctAnswersCount / totalQuestions) * 100; // Расчет процента правильных ответов
-    const passed = score >= 50; // Если процент >= 50, считаем, что тест пройден
+    const score = (correctAnswersCount / totalQuestions) * 100;
+    const passed = score >= 50;
 
     const result = {
-      studentId: 1, // Студент с id 1
-      test: { // Полный объект теста
+      studentId: 1,
+      test: {
         id: test.id,
         title: test.title,
         courseId: test.courseId,
@@ -93,9 +83,9 @@ function Courses() {
     })
       .then(() => {
         alert("Результаты успешно отправлены!");
-        setExpandedTest(null); // Закрыть тест после отправки
-        setResult(result); // Сохраняем результат теста
-        setIsResultModalOpen(true); // Открываем модальное окно с результатом
+        setExpandedTest(null);
+        setResult(result);
+        setIsResultModalOpen(true);
       })
       .catch((err) => {
         setError(err.message);
@@ -103,23 +93,19 @@ function Courses() {
       });    
   };
 
-  // Закрыть модальное окно с результатом
   const closeResultModal = () => {
     setIsResultModalOpen(false);
-    setResult(null); // Очищаем результат
+    setResult(null);
   };
 
-  // Если ошибка, отображаем сообщение
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  // Если данные ещё не загрузились
   if (!courses.length) {
     return <div>Loading courses...</div>;
   }
 
-  // Если выбран курс, показываем тесты
   if (selectedCourse) {
     return (
       <div>
@@ -138,8 +124,6 @@ function Courses() {
                 }}
               >
                 <h2>Тест</h2>
-
-                {/* Если тест развернут, показываем вопросы и варианты */}
                 {expandedTest === test.id ? (
                   <div>
                     <p>{test.description}</p>
@@ -155,7 +139,7 @@ function Courses() {
                                   name={`question-${question.id}`}
                                   value={option}
                                   checked={answers[test.id]?.[question.id] === option}
-                                  onChange={() => handleAnswerChange(test.id, question.id, option)} // Обработчик выбора ответа
+                                  onChange={() => handleAnswerChange(test.id, question.id, option)}
                                 />
                                 <label>{option}</label>
                               </li>
@@ -174,7 +158,7 @@ function Courses() {
                         borderRadius: "5px",
                         cursor: "pointer",
                       }}
-                      onClick={() => handleFinishTest(test)} // Завершение теста
+                      onClick={() => handleFinishTest(test)}
                     >
                       Завершить
                     </button>
@@ -188,7 +172,7 @@ function Courses() {
                         borderRadius: "5px",
                         cursor: "pointer",
                       }}
-                      onClick={() => handleToggleTest(test.id)} // Закрытие теста
+                      onClick={() => handleToggleTest(test.id)}
                     >
                       Закрыть
                     </button>
@@ -203,7 +187,7 @@ function Courses() {
                       borderRadius: "5px",
                       cursor: "pointer",
                     }}
-                    onClick={() => handleToggleTest(test.id)} // Открытие теста
+                    onClick={() => handleToggleTest(test.id)}
                   >
                     Открыть
                   </button>
@@ -213,8 +197,6 @@ function Courses() {
           ))}
         </ul>
         <button onClick={() => setSelectedCourse(null)}>Назад к курсам</button>
-
-        {/* Модальное окно с результатом */}
         {isResultModalOpen && (
           <div
             style={{
@@ -243,7 +225,7 @@ function Courses() {
                 borderRadius: "5px",
                 cursor: "pointer",
               }}
-              onClick={closeResultModal} // Закрытие модального окна
+              onClick={closeResultModal}
             >
               Закрыть
             </button>
@@ -253,7 +235,6 @@ function Courses() {
     );
   }
 
-  // Отображаем список курсов
   return (
     <div>
       <h1>Курсы</h1>
@@ -262,7 +243,7 @@ function Courses() {
           <div
             key={course.id}
             className="course-card"
-            onClick={() => handleCourseClick(course.id)} // При клике на курс, загружаем тесты
+            onClick={() => handleCourseClick(course.id)}
             style={{
               cursor: "pointer",
               border: "1px solid #ddd",
@@ -272,7 +253,7 @@ function Courses() {
               boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
               transition: "transform 0.3s",
             }}
-            onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")} // Анимация при наведении
+            onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
             onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
           >
             <h2>{course.title}</h2>
