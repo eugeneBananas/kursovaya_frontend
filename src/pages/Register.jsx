@@ -33,7 +33,7 @@ function Register() {
 
       if (response.ok) {
         const data = await response.json();
-        alert('Registration successful!');
+        alert('Регистрация прошла успешно!!!');
         console.log('Server response:', data);
       } else {
         const errorData = await response.json();
@@ -48,11 +48,11 @@ function Register() {
 
   return (
     <div>
-      <h1>Register</h1>
+      <h1>Регистрация</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>
-            Full Name:
+            Имя:
             <input
               type="text"
               name="fullName"
@@ -76,7 +76,7 @@ function Register() {
         </div>
         <div>
           <label>
-            Password:
+            Пароль:
             <input
               type="password"
               name="password"
@@ -86,10 +86,10 @@ function Register() {
             />
           </label>
         </div>
-        <button type="submit">Register</button>
+        <button type="submit">Зарегистрироваться</button>
       </form>
       <p>
-        Already have an account? <Link to="/login">Login here</Link>
+        Уже есть аккаунт? <Link to="/login">Войти</Link>
       </p>
     </div>
   );

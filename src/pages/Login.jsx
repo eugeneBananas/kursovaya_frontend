@@ -28,7 +28,7 @@ function Login() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.token);
-        alert('Login successful!');
+        alert('Вы вошли успешно!');
         navigate('/');
       } else {
         const errorData = await response.json();
@@ -43,7 +43,7 @@ function Login() {
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Вход</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <label>
@@ -59,7 +59,7 @@ function Login() {
         </div>
         <div>
           <label>
-            Password:
+            Пароль:
             <input
               type="password"
               name="password"
@@ -69,10 +69,10 @@ function Login() {
             />
           </label>
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Войти</button>
       </form>
       <p>
-        Do not have an account? <Link to="/register">Register here</Link>
+        У вас нет аккаунта? <Link to="/register">Регистрация</Link>
       </p>
     </div>
   );
